@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def hello_world():
-    return u'Ekran główny, tu będzie logowanie a Karol to PICZKA i zabijają go utopce :P'
+    return render_template('login.html')
+@app.route('/main')
+def display_main():
+    return u'Shity i notatki'
 
 
 if __name__ == '__main__':
