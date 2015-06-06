@@ -8,7 +8,6 @@ message = ''
 def check_allowing(str):
     for a in str:
         if a not in (string.letters or string.digits):
-            print 'np'
             return False
     return True
 
