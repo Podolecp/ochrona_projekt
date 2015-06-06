@@ -7,12 +7,12 @@ message = ''
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return "Takiej strony ni ma :P", 404
+    return "404 Takiej strony ni ma :P", 404
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('login.html', message='')
+    return render_template('login.html', info='')
 
 
 @app.route('/main')
@@ -27,7 +27,7 @@ def veryfication():
         password = request.form['password']
     if login == 'Karol' and password == 'piczka':
         return render_template("main.html")
-    return render_template('login.html', messege='Niepoprawne dane')
+    return render_template('login.html', info='Niepoprawne dane (Karolek coś zepsuł)')
 
 
 if __name__ == '__main__':
