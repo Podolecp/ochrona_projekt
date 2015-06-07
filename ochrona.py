@@ -88,10 +88,7 @@ def veryfication():
         password = request.form['password']
     if not check_allowing(login) and not check_allowing(password):
         return render_template('login.html', info='Niepoprawne znaki')
-    usertmp = sessiondb.query(User).filter(User.username == login).first()
-    if usertmp is None:
-        return render_template('login.html', info=u'Niepoprawne dane')
-    if usertmp.check_password(password):
+    if check_user(login,password):
         session['login'] = login
         return display_main("zalogowano", login)
     return render_template('login.html', info=u'Niepoprawne dane')
@@ -100,3 +97,9 @@ def veryfication():
 if __name__ == '__main__':
     app.debug = True
     app.run()
+
+def check_user(login, password):
+    usertmp = sessiondb.query(User).filter(User.username == login).first()
+    if usertmp is None:
+        return false
+    return usertmp.check_password(password)
