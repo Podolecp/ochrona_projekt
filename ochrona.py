@@ -41,7 +41,7 @@ def veryfication():
     if not check_allowing(login) and not check_allowing(password):
         return render_template('login.html', info='Niepoprawne znaki')
     usertmp = uzytkownik.User.query.filter_by(username=login).first()
-    if usertmp == 'None':#TUTAJ TRZEBA POPRAWIC, ZROBIE JUTRO
+    if usertmp is None:
         return render_template('login.html', info=u'Niepoprawne dane')
     if usertmp.check_password(password):
         return render_template("main.html")
