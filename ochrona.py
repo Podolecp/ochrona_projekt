@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, abort, request
+from flask import Flask, render_template, abort, request, session
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
 import string
@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ap
 db = SQLAlchemy(app)
 #===================================
 
-
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 def check_allowing(str):
     for a in str:
@@ -27,15 +27,25 @@ def page_not_found(error):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    if 'login' in session:
+        return display_main(session['login'])
     return render_template('login.html', info='')
 
 @app.route('/registration', methods=['GET', 'POST'])
 def display_registration():
     return render_template('register.html', info='')
 
-@app.route('/main', methods=['GET', 'POST'])
-def display_main():
-    notes = 'Notatki Karola'
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('login', None)
+    return index()
+
+#@app.route('/main', methods=['GET', 'POST'])
+def display_main(login):
+    notes = """
+    Witaj: """ + login + """
+    Notatki Karola"""
     return render_template('main.html', notes=notes)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -54,7 +64,9 @@ def veryfication():
     if usertmp is None:
         return render_template('login.html', info=u'Niepoprawne dane')
     if usertmp.check_password(password):
-        display_main()
+        session['login'] = login
+
+        return display_main(login)
     return render_template('login.html', info=u'Niepoprawne dane')
 
 

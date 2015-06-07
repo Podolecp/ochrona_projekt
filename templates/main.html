@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
+<body>
 {{ notes }}
+<form method="post" action="comment">
+Comment:<br />
+  <textarea name='comment' id='comment'></textarea><br />
+  <input type="password" name="password" value="" placeholder="Enter your password">
+  <input type='submit' value='Submit' />
+    </form>
+<form action="logout">
+<button action="logout">Logout</button>
+</form>
 </body>
 </html>
