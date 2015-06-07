@@ -55,7 +55,7 @@ def registration():
 
 @app.route('/login', methods=['GET', 'POST'])
 def veryfication():
-    if request.method == 'POST':
+    if request.method == 'POST'++++++++:
         login = request.form['login']
         password = request.form['password']
     if not check_allowing(login) and not check_allowing(password):
