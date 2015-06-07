@@ -1,0 +1,48 @@
+Certificate:
+    Data:
+        Version: 1 (0x0)
+        Serial Number: 2 (0x2)
+    Signature Algorithm: md5WithRSAEncryption
+        Issuer: C=pl, ST=qq, L=qq, O=qq, OU=qq, CN=qq/emailAddress=qq@qq.q
+        Validity
+            Not Before: Jun  7 10:50:31 2015 GMT
+            Not After : Jun  6 10:50:31 2016 GMT
+        Subject: C=pl, ST=Karol-State, L=karolkom, O=KArol Corp, OU=karolkom, CN=KC/emailAddress=karol@karol.pl
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (1024 bit)
+                Modulus:
+                    00:d0:70:72:1f:84:09:06:f1:d1:25:84:af:4d:b3:
+                    01:95:fa:e1:ba:63:5e:f1:38:92:84:1a:24:5e:38:
+                    05:ca:f6:61:0e:50:5a:fb:b0:32:e4:c5:6e:71:f9:
+                    f3:b2:8e:83:0c:3c:58:00:fb:09:02:45:b3:3c:b4:
+                    3f:f8:d3:65:d7:25:5a:77:0b:96:08:4c:02:d0:38:
+                    ab:30:a6:ba:9a:83:a4:aa:df:b0:f6:65:7f:f6:86:
+                    0c:cb:60:55:b5:ba:97:fd:46:e1:f3:9d:c4:36:62:
+                    64:16:d6:1e:47:65:4c:ad:c6:ce:62:b9:b6:37:f2:
+                    17:cf:6a:01:1f:20:0a:ab:77
+                Exponent: 65537 (0x10001)
+    Signature Algorithm: md5WithRSAEncryption
+         02:20:1d:08:f4:39:45:f4:89:71:1c:69:35:13:b2:4e:bf:f1:
+         1d:25:67:0c:40:7b:e0:91:17:05:b4:f0:18:f9:bf:22:a2:8a:
+         c8:83:6e:7e:ea:4e:25:68:1e:82:92:dd:0d:f6:8a:fa:8d:83:
+         c2:12:b6:00:de:ff:e8:02:a2:52:a1:16:e9:8b:18:d1:99:ba:
+         95:f4:11:dc:d4:62:9e:f4:83:fa:bc:ec:7c:f5:62:6f:63:1a:
+         45:db:f0:f6:fb:00:56:54:b3:49:35:19:4e:23:ce:2a:f7:51:
+         c6:f7:96:bc:5b:84:f3:75:3e:e1:d8:aa:07:4c:ae:c6:36:24:
+         be:5c
+-----BEGIN CERTIFICATE-----
+MIICYDCCAckCAQIwDQYJKoZIhvcNAQEEBQAwZjELMAkGA1UEBhMCcGwxCzAJBgNV
+BAgMAnFxMQswCQYDVQQHDAJxcTELMAkGA1UECgwCcXExCzAJBgNVBAsMAnFxMQsw
+CQYDVQQDDAJxcTEWMBQGCSqGSIb3DQEJARYHcXFAcXEucTAeFw0xNTA2MDcxMDUw
+MzFaFw0xNjA2MDYxMDUwMzFaMIGKMQswCQYDVQQGEwJwbDEUMBIGA1UECAwLS2Fy
+b2wtU3RhdGUxETAPBgNVBAcMCGthcm9sa29tMRMwEQYDVQQKDApLQXJvbCBDb3Jw
+MREwDwYDVQQLDAhrYXJvbGtvbTELMAkGA1UEAwwCS0MxHTAbBgkqhkiG9w0BCQEW
+Dmthcm9sQGthcm9sLnBsMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDQcHIf
+hAkG8dElhK9NswGV+uG6Y17xOJKEGiReOAXK9mEOUFr7sDLkxW5x+fOyjoMMPFgA
++wkCRbM8tD/402XXJVp3C5YITALQOKswprqag6Sq37D2ZX/2hgzLYFW1upf9RuHz
+ncQ2YmQW1h5HZUytxs5iubY38hfPagEfIAqrdwIDAQABMA0GCSqGSIb3DQEBBAUA
+A4GBAAIgHQj0OUX0iXEcaTUTsk6/8R0lZwxAe+CRFwW08Bj5vyKiisiDbn7qTiVo
+HoKS3Q32ivqNg8IStgDe/+gColKhFumLGNGZupX0EdzUYp70g/q87Hz1Ym9jGkXb
+8Pb7AFZUs0k1GU4jzir3Ucb3lrxbhPN1PuHYqgdMrsY2JL5c
+-----END CERTIFICATE-----
