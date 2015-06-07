@@ -12,10 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ap
 db = SQLAlchemy(app)
 #===================================
 
-from OpenSSL import SSL
-context = SSL.Context(SSL.SSLv23_METHOD)
-context.use_privatekey_file('/home/piotr/PycharmProjects/ochrona_projekt/ssl/server.key')
-context.use_certificate_file('/home/piotr/PycharmProjects/ochrona_projekt/ssl/server.crt')
+
 
 def check_allowing(str):
     for a in str:
@@ -56,4 +53,4 @@ def veryfication():
 if __name__ == '__main__':
     db.create_all()
     app.debug = True
-    app.run(ssl_context=context)
+    app.run()
