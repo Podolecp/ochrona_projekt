@@ -3,6 +3,7 @@ from flask import Flask, render_template, abort, request
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
 import string
+import uzytkownik
 
 app = Flask(__name__)
 #Tu stawiam baze danych
@@ -39,11 +40,15 @@ def veryfication():
         password = request.form['password']
     if not check_allowing(login) and not check_allowing(password):
         return render_template('login.html', info='Niepoprawne znaki')
-    if login == 'Karol' and password == 'piczka':
+    usertmp = uzytkownik.User.query.filter_by(username=login).first()
+    if usertmp == 'None':#TUTAJ TRZEBA POPRAWIC, ZROBIE JUTRO
+        return render_template('login.html', info=u'Niepoprawne dane')
+    if usertmp.check_password(password):
         return render_template("main.html")
-    return render_template('login.html', info=u'Niepoprawne dane (Karolek coś zepsuł)')
+    return render_template('login.html', info=u'Niepoprawne dane')
 
 
 if __name__ == '__main__':
+    db.create_all()
     app.debug = True
     app.run()
