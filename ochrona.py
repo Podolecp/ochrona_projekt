@@ -24,11 +24,19 @@ def check_allowing(str):
 def page_not_found(error):
     return "404 Takiej strony ni ma :P ", 404
 
+@app.route('/comment', methods=['GET', 'POST'])
+def commenting():
+    if request.method == 'POST':
+        comment = request.form['comment']
+        password = request.form['password']
+        if not check_allowing(password):
+            return display_main(u'Niepoprawne hasło',session['login'] )
+    return display_main('',session['login'] )
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if 'login' in session:
-        return display_main(session['login'])
+        return display_main(' ', session['login'])
     return render_template('login.html', info='')
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -42,11 +50,11 @@ def logout():
     return index()
 
 #@app.route('/main', methods=['GET', 'POST'])
-def display_main(login):
+def display_main(note, login):
     notes = """
     Witaj: """ + login + """
     Notatki Karola"""
-    return render_template('main.html', notes=notes)
+    return render_template('main.html', notes=notes, info=note)
 
 @app.route('/register', methods=['GET', 'POST'])
 def registration():
@@ -55,7 +63,7 @@ def registration():
 
 @app.route('/login', methods=['GET', 'POST'])
 def veryfication():
-    if request.method == 'POST'++++++++:
+    if request.method == 'POST':
         login = request.form['login']
         password = request.form['password']
     if not check_allowing(login) and not check_allowing(password):
@@ -65,8 +73,7 @@ def veryfication():
         return render_template('login.html', info=u'Niepoprawne dane')
     if usertmp.check_password(password):
         session['login'] = login
-
-        return display_main(login)
+        return display_main("zalogowano", login)
     return render_template('login.html', info=u'Niepoprawne dane')
 
 
