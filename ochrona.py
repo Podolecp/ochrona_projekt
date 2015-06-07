@@ -1,15 +1,24 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, abort, request, session
-from flask.ext.sqlalchemy import SQLAlchemy
-import os
 import string
-import uzytkownik
+import database
+import os
+import sys
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 app = Flask(__name__)
+
 #Tu stawiam baze danych
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
-db = SQLAlchemy(app)
+Base = declarative_base()
+engine = create_engine('sqlite:///app.db')
+Base.metadata.bind = engine
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
+#basedir = os.path.abspath(os.path.dirname(__file__))
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
+#db = SQLAlchemy(app)
 #===================================
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -58,8 +67,21 @@ def display_main(note, login):
 
 @app.route('/register', methods=['GET', 'POST'])
 def registration():
-    print request.form['login'] + request.form['password'] + request.form['password_repeat'] + request.form['secret_question'] + request.form['answer']
-    return render_template('register.html', info=u'Coś tam coś')
+    if request.method == 'POST':
+        login = request.form['login']
+        password = request.form['password']
+        password2 = request.form['password_repeat']
+        question = request.form['secret_question']
+        answer = request.form['answer']
+    if not check_allowing(login) and not check_allowing(password) and not check_allowing(password2) and not check_allowing(question) and not check_allowing(answer):
+        return render_template('register.html', info='Niepoprawne dane')
+    usertmp = database.User.query.filter_by(username=login).first()
+    if not (usertmp is None) or (password2 == password):
+        return render_template('register.html', info=u'Niepoprawne dane')
+    new_user = database.User(login,password,question,answer)
+    session.add(new_user)
+    session.commit()
+    return render_template('login.html', info=u'Coś tam coś rejestracja udana')
 
 @app.route('/login', methods=['GET', 'POST'])
 def veryfication():
@@ -68,7 +90,7 @@ def veryfication():
         password = request.form['password']
     if not check_allowing(login) and not check_allowing(password):
         return render_template('login.html', info='Niepoprawne znaki')
-    usertmp = uzytkownik.User.query.filter_by(username=login).first()
+    usertmp = database.User.query.filter_by(username=login).first()
     if usertmp is None:
         return render_template('login.html', info=u'Niepoprawne dane')
     if usertmp.check_password(password):
@@ -78,6 +100,5 @@ def veryfication():
 
 
 if __name__ == '__main__':
-    db.create_all()
     app.debug = True
     app.run()
