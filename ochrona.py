@@ -3,7 +3,10 @@ from flask import Flask, render_template, abort, request, session
 import string
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database import User, Base
+from database import User, Base, Log
+from flask import request
+from flask import jsonify
+import time
 
 app = Flask(__name__)
 
@@ -22,7 +25,14 @@ def check_allowing(str):
             return False
     return True
 
+def check_user(login, password):
+    usertmp = sessiondb.query(User).filter(User.username == login).first()
+    if usertmp is None:
+        return false
+    return usertmp.check_password(password)
 
+def get_my_ip():
+    return request.remote_addr
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -88,7 +98,11 @@ def veryfication():
         password = request.form['password']
     if not check_allowing(login) and not check_allowing(password):
         return render_template('login.html', info='Niepoprawne znaki')
-    if check_user(login,password):
+    if check_user(login, password):
+        log = time.strftime("%d/%m/%Y") + ' - ' + time.strftime("%H:%M:%S") + ' - ' + get_my_ip()
+        new_log = Log(login, log)
+        sessiondb.add(new_log)
+        sessiondb.commit()
         session['login'] = login
         return display_main("zalogowano", login)
     return render_template('login.html', info=u'Niepoprawne dane')
@@ -97,9 +111,3 @@ def veryfication():
 if __name__ == '__main__':
     app.debug = True
     app.run()
-
-def check_user(login, password):
-    usertmp = sessiondb.query(User).filter(User.username == login).first()
-    if usertmp is None:
-        return false
-    return usertmp.check_password(password)
