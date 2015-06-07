@@ -20,6 +20,8 @@ def check_allowing(str):
             return False
     return True
 
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return "404 Takiej strony ni ma :P ", 404
@@ -30,8 +32,8 @@ def commenting():
         comment = request.form['comment']
         password = request.form['password']
         if not check_allowing(password):
-            return display_main(u'Niepoprawne hasło',session['login'] )
-    return display_main('',session['login'] )
+            return display_main(u'Niepoprawne hasło', session['login'] )
+    return display_main('', session['login'] )
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -51,9 +53,8 @@ def logout():
 
 #@app.route('/main', methods=['GET', 'POST'])
 def display_main(note, login):
-    notes = """
-    Witaj: """ + login + """
-    Notatki Karola"""
+    note = note + " Witaj: " + login
+    notes = open('notes.txt').read()
     return render_template('main.html', notes=notes, info=note)
 
 @app.route('/register', methods=['GET', 'POST'])
