@@ -33,9 +33,10 @@ def index():
 def display_registration():
     return render_template('register.html', info='')
 
-@app.route('/main')
+@app.route('/main', methods=['GET', 'POST'])
 def display_main():
-    return u'Shity i notatki'
+    notes = 'Notatki Karola'
+    return render_template('main.html', notes=notes)
 
 @app.route('/register', methods=['GET', 'POST'])
 def registration():
@@ -53,7 +54,7 @@ def veryfication():
     if usertmp is None:
         return render_template('login.html', info=u'Niepoprawne dane')
     if usertmp.check_password(password):
-        return render_template("main.html")
+        display_main()
     return render_template('login.html', info=u'Niepoprawne dane')
 
 
