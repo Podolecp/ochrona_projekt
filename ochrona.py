@@ -22,18 +22,25 @@ def check_allowing(str):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return "404 Takiej strony ni ma :P " + error, 404
+    return "404 Takiej strony ni ma :P ", 404
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('login.html', info='')
 
+@app.route('/registration', methods=['GET', 'POST'])
+def display_registration():
+    return render_template('register.html', info='')
 
 @app.route('/main')
 def display_main():
     return u'Shity i notatki'
 
+@app.route('/register', methods=['GET', 'POST'])
+def registration():
+    print request.form['login'] + request.form['password'] + request.form['password_repeat'] + request.form['secret_question'] + request.form['answer']
+    return render_template('register.html', info=u'Coś tam coś')
 
 @app.route('/login', methods=['GET', 'POST'])
 def veryfication():
