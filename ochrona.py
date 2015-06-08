@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database import User, Base, Log
 from flask import request
-from flask import jsonify
+import HTMLParser
 import time
 
 app = Flask(__name__)
@@ -18,6 +18,7 @@ sessiondb = DBSession()
 #===================================
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+h = HTMLParser.HTMLParser()
 
 def check_allowing(str):
     for a in str:
@@ -54,7 +55,7 @@ def commenting():
             return display_main(u'Niepoprawne hasło', session['login'] )
         if not check_allowing_ws(comment):
             return display_main(u'Niepoprawne dane', session['login'] )
-    return display_main('', session['login'] )
+    return display_main('<p>PPP</p>', session['login'] )
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
