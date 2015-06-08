@@ -7,9 +7,9 @@ from database import User, Base, Log
 from flask import request
 import HTMLParser
 import time
-
+import json
 app = Flask(__name__)
-
+#notatki = [{'nick': 'Karol', 'data':'Zabijajo mnie utopcy :/'}, {'nick': 'Karol','data':'Zabijajo mnie nekkery :/'}]
 #Tu stawiam baze danych
 engine = create_engine('sqlite:///app.db')
 Base.metadata.bind = engine
@@ -49,13 +49,22 @@ def page_not_found(error):
 @app.route('/comment', methods=['GET', 'POST'])
 def commenting():
     if request.method == 'POST':
+        login = session['login']
         comment = request.form['comment']
         password = request.form['password']
-        if not check_allowing(password):
-            return display_main(u'Niepoprawne hasło', session['login'] )
+        if not check_user(login, password) or not check_allowing(password):
+            return display_main(u'Niepoprawne hasło', login )
         if not check_allowing_ws(comment):
-            return display_main(u'Niepoprawne dane', session['login'] )
-    return display_main('<p>PPP</p>', session['login'] )
+            return display_main(u'Niepoprawne dane', login )
+        f = open('notes.txt', 'rw')
+        notes = json.load(f)
+        new = {'nick': login, 'data': comment}
+        notes.insert(0, new)
+        f.close()
+        f = open('notes.txt', 'w')
+        json.dump(notes, f)
+        f.close()
+    return display_main('', session['login'])
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -76,8 +85,10 @@ def logout():
 #@app.route('/main', methods=['GET', 'POST'])
 def display_main(note, login):
     note = note + " Witaj: " + login
-    notes = open('notes.txt').read()
-    return render_template('main.html', notes=notes, info=note)
+    f = open('notes.txt', 'r')
+    notes = json.load(f)
+    f.close()
+    return render_template('main.html', info=note, navigation=notes)
 
 @app.route('/register', methods=['GET', 'POST'])
 def registration():

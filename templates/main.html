@@ -16,5 +16,8 @@ Comment:<br />
 <form action="logout">
 <button action="logout">Logout</button>
 </form>
+{% for item in navigation %}
+        <div><h4>{{ item.nick }}</h4><p>{{ item.data }}</p></div>
+    {% endfor %}
 </body>
 </html>
