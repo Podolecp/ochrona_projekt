@@ -18,11 +18,15 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 def check_allowing(str):
     for a in str:
-        if a not in (string.letters or string.digits):
+        if a not in (string.letters + string.digits):
             return False
     return True
 
-
+def check_allowing_ws(str):
+    for a in str:
+        if a not in (string.letters + string.digits + string.whitespace + '.,!?;:'):
+            return False
+    return True
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -35,6 +39,8 @@ def commenting():
         password = request.form['password']
         if not check_allowing(password):
             return display_main(u'Niepoprawne hasło', session['login'] )
+        if not check_allowing_ws(comment):
+            return display_main(u'Niepoprawne dane', session['login'] )
     return display_main('', session['login'] )
 
 @app.route('/', methods=['GET', 'POST'])
