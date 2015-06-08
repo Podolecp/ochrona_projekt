@@ -118,7 +118,7 @@ def veryfication():
         login = request.form['login']
         password = request.form['password']
     if not check_allowing(login) and not check_allowing(password):
-        return render_template('login.html', info='Niepoprawne znaki')
+        return render_template('login.html', info='Niepoprawne dane')
     if check_user(login, password):
         log = time.strftime("%d/%m/%Y") + ' - ' + time.strftime("%H:%M:%S") + ' - ' + get_my_ip()
         new_log = Log(login, log)
@@ -127,6 +127,28 @@ def veryfication():
         session['login'] = login
         return display_main("zalogowano", login)
     return render_template('login.html', info=u'Niepoprawne dane')
+
+@app.route('/remind_password_login', methods=['GET', 'POST'])
+def display_remind_password():
+    return render_template('remind_password_login.html', info='')
+
+@app.route('/remind_password_login', methods=['GET', 'POST'])
+def remind_login():
+    if request.method == 'POST':
+        login = request.form['login']
+    if not check_allowing(login):
+        return render_template('remind_password_login.html', info='Niepoprawne dane')
+    usertmp = sessiondb.query(User).filter(User.username == login).first()
+    if usertmp is None:
+        return render_template('remind_password_login.html', info='Niepoprawne dane')
+    return render_template('remind_password.html', question=usertmp.question)
+
+@app.route('/remind_password', methods=['GET', 'POST'])
+def remind_login():
+    if request.method == 'POST':
+        answer = request.form['answer']
+    if not check_allowing(answer):
+        return render_template('remind_password.html', info='Niepoprawne dane')
 
 
 if __name__ == '__main__':
