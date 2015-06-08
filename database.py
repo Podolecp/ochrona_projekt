@@ -35,3 +35,16 @@ class User(Base):
 
     def check_answer(self, answer):
         return bcrypt.hashpw(answer.encode('utf-8'), self.answer.encode('utf-8')) == self.answer.encode('utf-8')
+
+class Log(Base):
+    __tablename__ = "logs"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(80))
+    log = Column(String(80))
+
+    def __init__(self, username, log):
+        self.username = username
+        self.log = log
+
+    def __repr__(self):
+        return '<Log %r>' % self.username
