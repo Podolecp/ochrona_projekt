@@ -142,15 +142,19 @@ def remind_login():
     usertmp = sessiondb.query(User).filter(User.username == login).first()
     if usertmp is None:
         usertmp = sessiondb.query(User).order_by(func.random()).first()
-        session['login_remind'] = '=^-^='
+        session['login_remind_legit'] = u'=^O^='
+        session['login_remind'] = usertmp.username
         return render_template('remind_password.html', question=usertmp.question)
+    session['login_remind_legit'] = u'=^-^='
     session['login_remind'] = login
     return render_template('remind_password.html', question=usertmp.question)
 
 @app.route('/remind_password_answer', methods=['GET', 'POST'])
 def remind_answer():
     login = session['login_remind']
-    if session['login_remind'] == u'=^-^=':
+    usertmp = sessiondb.query(User).filter(User.username == login).first()
+    print usertmp.username
+    if session['login_remind_legit'] == u'=^O^=':
         return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
     if request.method == 'POST':
         answer = request.form['answer']
@@ -160,7 +164,7 @@ def remind_answer():
         return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
     if not check_allowing(answer) or not check_allowing(newpassword) or not check_allowing(newpassword_repeat):
         return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
-    usertmp = sessiondb.query(User).filter(User.username == login).first()
+
     if usertmp is None:
         return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
     if usertmp.check_answer(answer):
