@@ -8,6 +8,7 @@ from flask import request
 import HTMLParser
 import time
 import json
+from  sqlalchemy.sql.expression import func, select
 app = Flask(__name__)
 #notatki = [{'nick': 'Karol', 'data':'Zabijajo mnie utopcy :/'}, {'nick': 'Karol','data':'Zabijajo mnie nekkery :/'}]
 #Tu stawiam baze danych
@@ -98,7 +99,7 @@ def registration():
         password2 = request.form['password_repeat']
         question = request.form['secret_question']
         answer = request.form['answer']
-    if not check_allowing(login) and not check_allowing(password) and not check_allowing(password2) and not check_allowing(question) and not check_allowing(answer):
+    if not check_allowing(login) or not check_allowing(password) or not check_allowing(password2) or not check_allowing(question) or not check_allowing(answer):
         return render_template('register.html', info='Niepoprawne dane')
     if login == '' or password == '' or question == '' or answer == '':
         return render_template('register.html', info=u'Wypelnij wszystko')
@@ -117,7 +118,7 @@ def veryfication():
     if request.method == 'POST':
         login = request.form['login']
         password = request.form['password']
-    if not check_allowing(login) and not check_allowing(password):
+    if not check_allowing(login) or not check_allowing(password):
         return render_template('login.html', info='Niepoprawne dane')
     if check_user(login, password):
         log = time.strftime("%d/%m/%Y") + ' - ' + time.strftime("%H:%M:%S") + ' - ' + get_my_ip()
@@ -128,7 +129,7 @@ def veryfication():
         return display_main("zalogowano", login)
     return render_template('login.html', info=u'Niepoprawne dane')
 
-@app.route('/remind_password_login', methods=['GET', 'POST'])
+@app.route('/remind_password', methods=['GET', 'POST'])
 def display_remind_password():
     return render_template('remind_password_login.html', info='')
 
@@ -140,16 +141,32 @@ def remind_login():
         return render_template('remind_password_login.html', info='Niepoprawne dane')
     usertmp = sessiondb.query(User).filter(User.username == login).first()
     if usertmp is None:
-        return render_template('remind_password_login.html', info='Niepoprawne dane')
+        usertmp = sessiondb.query(User).order_by(func.random()).first()
+        session['login_remind'] = '=^-^='
+        return render_template('remind_password.html', question=usertmp.question)
+    session['login_remind'] = login
     return render_template('remind_password.html', question=usertmp.question)
 
-@app.route('/remind_password', methods=['GET', 'POST'])
-def remind_login():
+@app.route('/remind_password_answer', methods=['GET', 'POST'])
+def remind_answer():
+    login = session['login_remind']
+    if session['login_remind'] == u'=^-^=':
+        return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
     if request.method == 'POST':
         answer = request.form['answer']
-    if not check_allowing(answer):
-        return render_template('remind_password.html', info='Niepoprawne dane')
-
+        newpassword = request.form['newpassword']
+        newpassword_repeat = request.form['newpassword_repeat']
+    if not newpassword == newpassword_repeat:
+        return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
+    if not check_allowing(answer) or not check_allowing(newpassword) or not check_allowing(newpassword_repeat):
+        return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
+    usertmp = sessiondb.query(User).filter(User.username == login).first()
+    if usertmp is None:
+        return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
+    if usertmp.check_answer(answer):
+        usertmp.set_password(newpassword)
+        return render_template('login.html', info=u'Hasło zmienione')
+    return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
 
 if __name__ == '__main__':
     app.debug = True

@@ -36,6 +36,7 @@ class User(Base):
     def check_answer(self, answer):
         return bcrypt.hashpw(answer.encode('utf-8'), self.answer.encode('utf-8')) == self.answer.encode('utf-8')
 
+
 class Log(Base):
     __tablename__ = "logs"
     id = Column(Integer, primary_key=True)
