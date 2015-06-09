@@ -49,16 +49,33 @@ def page_not_found(error):
 
 @app.route('/settings', methods=['GET', 'POST'])
 def display_settings():
+    login = session['login']
+    return render_template('settings.html', name=login)
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    login = session['login']
     if request.method == 'POST':
-        login = session['login']
+        password = request.form['oldpassword']
+        newpassword = request.form['newpassword']
+        newpassword_repeat = request.form['newpassword_repeat']
+    usertmp = sessiondb.query(User).filter(User.username == login).first()
+    if usertmp is None:
+        return render_template('settings.html', info='Jakis zly blad :(, przeloguj sie', name=login)
+    if not check_allowing(password) or not check_allowing(newpassword) or not check_allowing(newpassword_repeat):
+        return render_template('settings.html', info='Niepoprawne dane', name=login)
+    if not newpassword == newpassword_repeat:
+        return render_template('settings.html', info='Niepoprawne dane', name=login)
+    if usertmp.check_password(password):
+        usertmp.set_password(newpassword)
+        return render_template('settings.html', info=u'Hasło zmienione', name=login)
+    return render_template('settings.html', info='Niepoprawne dane', name=login)
+
+@app.route('/show_logs', methods=['GET', 'POST'])
+def show_logs():
+    login = session['login']
     logs = sessiondb.query(Log).filter(Log.username==login).order_by(Log.id)
     return render_template('settings.html', name=login, logi=logs)
-#TU ZMIENIASZ STRONE |||||||||||||||||||||||||||||||||||
-
-#TU OBSŁUGA KLIKNIĘCIA NA ZMIANĘ:
-@app.route('/zmiana', methods=['GET', 'POST'])
-def zmien_haslo():
-    return
 
 @app.route('/comment', methods=['GET', 'POST'])
 def commenting():
@@ -70,7 +87,7 @@ def commenting():
             return display_main(u'Niepoprawne hasło', login )
         if not check_allowing_ws(comment):
             return display_main(u'Niepoprawne dane', login )
-        f = open('notes.txt', 'rw')
+        f = open('notes.txt', 'r+')
         notes = json.load(f)
         new = {'nick': login, 'data': comment}
         notes.insert(0, new)
@@ -177,7 +194,6 @@ def remind_answer():
         return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
     if not check_allowing(answer) or not check_allowing(newpassword) or not check_allowing(newpassword_repeat):
         return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
-
     if usertmp is None:
         return render_template('remind_password.html', info='Niepoprawne dane', question=usertmp.question)
     if usertmp.check_answer(answer):

@@ -6,8 +6,19 @@
 </head>
 <body>
     <h2>{{ name }}</h2>
+    <h2 style="color: deeppink">{{ info }}</h2>
+     <form method="post" action="change_password">
+        <p><input type="password" name="oldpassword" value="" placeholder="Old password"></p>
+        <p><input type="password" name="newpassword" value="" placeholder="New password"></p>
+        <p><input type="password" name="newpassword_repeat" value="" placeholder="Repeat password"></p>
+         <p><input type="hidden" name="logi" value=logs></p>
+        <p class="submit"><input type="submit" name="commit" value="Change password"></p>
+      </form>
+    <form method="post" action="show_logs">
+            <button>Show logs</button>
+        </form>
 {% for log in logi %}
-        <div><h4>{{ log.log }}</h4></div>
+        <div><p>{{ log.log }}</p></div>
     {% endfor %}
 </body>
 </html>

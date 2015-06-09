@@ -1,1 +1,1 @@
-[{"nick": "admin", "data": "Dziala!"}, {"nick": "admin", "data": "Test"}, {"nick": "Karol", "data": "Zabijajo mnie utopcy :/"}, {"nick": "Karol", "data": "Zabijajo mnie nekkery :/"}]
+[{"nick": "Podolecp", "data": "Nom, wole grac we wiedzmaka"}, {"nick": "admin", "data": "Podolecp nic nie robi"}, {"nick": "admin", "data": "Dziala!"}, {"nick": "admin", "data": "Test"}, {"nick": "Karol", "data": "Zabijajo mnie utopcy :/"}, {"nick": "Karol", "data": "Zabijajo mnie nekkery :/"}]
