@@ -48,17 +48,11 @@ def page_not_found(error):
     return "404 Takiej strony ni ma :P ", 404
 
 @app.route('/settings', methods=['GET', 'POST'])
-def change_site():
-    return render_template('TUWSTAWSTRONE.html', info='')
-#TU ZMIENIASZ STRONE |||||||||||||||||||||||||||||||||||
-
-#TU OBSŁUGA KLIKNIĘCIA NA ZMIANĘ:
-@app.route('/settings', methods=['GET', 'POST'])
-def change_site():
+def display_settings():
     if request.method == 'POST':
         login = session['login']
-        comment = request.form['comment']
-        password = request.form['password']
+    logs = sessiondb.query(Log).filter(Log.username==login).order_by(Log.id)
+    return render_template('settings.html', name=login, logi=logs)
 
 @app.route('/comment', methods=['GET', 'POST'])
 def commenting():
