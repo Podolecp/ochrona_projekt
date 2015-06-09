@@ -53,8 +53,8 @@ def change_site():
 #TU ZMIENIASZ STRONE |||||||||||||||||||||||||||||||||||
 
 #TU OBSŁUGA KLIKNIĘCIA NA ZMIANĘ:
-@app.route('/settings', methods=['GET', 'POST'])
-def change_site():
+@app.route('/zmiana', methods=['GET', 'POST'])
+def zmien_haslo():
     if request.method == 'POST':
         login = session['login']
         comment = request.form['comment']
