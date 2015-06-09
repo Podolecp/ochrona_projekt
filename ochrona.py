@@ -53,6 +53,12 @@ def display_settings():
         login = session['login']
     logs = sessiondb.query(Log).filter(Log.username==login).order_by(Log.id)
     return render_template('settings.html', name=login, logi=logs)
+#TU ZMIENIASZ STRONE |||||||||||||||||||||||||||||||||||
+
+#TU OBSŁUGA KLIKNIĘCIA NA ZMIANĘ:
+@app.route('/zmiana', methods=['GET', 'POST'])
+def zmien_haslo():
+    return
 
 @app.route('/comment', methods=['GET', 'POST'])
 def commenting():
