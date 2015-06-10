@@ -21,7 +21,11 @@ sessiondb = DBSession()
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 h = HTMLParser.HTMLParser()
 
-import fileinput
+from OpenSSL import SSL
+context = SSL.Context(SSL.SSLv23_METHOD)
+context.use_privatekey_file('ssl/server.key')
+context.use_certificate_file('ssl/server.crt')
+
 
 def policz_entropie(dane):
     import math
@@ -224,4 +228,5 @@ def remind_answer():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    context = ('ssl/server.crt', 'ssl/server.key')
+    app.run(ssl_context=context, threaded=True)
