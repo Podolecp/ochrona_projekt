@@ -21,6 +21,26 @@ sessiondb = DBSession()
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 h = HTMLParser.HTMLParser()
 
+import fileinput
+
+def policz_entropie(dane):
+    import math
+    zbior={}
+    log2=lambda x:math.log(x)/math.log(2)
+    wartosc_entropii=0
+    for each in dane:
+        try:
+            zbior[each]+=1
+        except:
+            zbior[each]=1
+    len_data=len(dane)
+    for k,v in zbior.items():
+        freq  =  1.0*v/len_data
+        wartosc_entropii+=freq*log2(freq)
+    wartosc_entropii*=-1
+    return wartosc_entropii
+
+
 def check_allowing(str):
     for a in str:
         if a not in (string.letters + string.digits):
@@ -68,7 +88,8 @@ def change_password():
         return render_template('settings.html', info='Niepoprawne dane', name=login)
     if usertmp.check_password(password):
         usertmp.set_password(newpassword)
-        return render_template('settings.html', info=u'Hasło zmienione', name=login)
+        info = u'Hasło zmienione. Wartość entropii Twojego hasła: ' + str(policz_entropie(newpassword))
+        return render_template('settings.html', info=info, name=login)
     return render_template('settings.html', info='Niepoprawne dane', name=login)
 
 @app.route('/show_logs', methods=['GET', 'POST'])
